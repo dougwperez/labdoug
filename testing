@@ -1,0 +1,346 @@
+var currentScene;
+
+var drawScene3 = function() {
+    currentScene = 3;
+    background(8, 212, 90);
+};
+
+var drawScene4 = function() {
+    currentScene = 4;
+    background(219, 255, 135);
+    
+};
+
+
+var scene = 1;
+var drawScene1 = function() {
+    currentScene = 1;
+    background(210, 194, 255);
+    image(getImage("avatars/piceratops-ultimate"), 280, 20, 100, 100);
+    fill(147, 230, 23);
+        rect(30, 200, 100, 50, 10);
+        fill(234, 242, 5);
+        rect(150, 200, 100, 50, 10);
+        fill(255, 140, 0);
+        rect(270, 200, 100, 50, 10);
+      
+        fill(1, 3, 8);
+        textSize(50);
+        text('Vocab Match', 40, 158);
+        textSize(20);
+        text('Easy', 60, 231);
+        text('Medium', 163, 231);
+        text('Hard', 300, 231);
+       
+        
+    
+};
+
+
+
+var Tile = function(x, y, face) {
+    this.x = x;
+    this.y = y;
+    this.width = 70;
+    this.face = face;
+    this.isFaceUp = false;
+    this.isMatch = false;
+};
+
+Tile.prototype.draw = function() {
+    fill(214, 247, 202);
+    strokeWeight(2);
+    rect(this.x, this.y, this.width, this.width, 10);
+    if (this.isFaceUp) {
+        image(this.face, this.x, this.y, this.width, this.width);
+    } else {
+        image(getImage("avatars/leaf-green"), this.x, this.y, this.width, this.width);
+    }
+};
+
+Tile.prototype.isUnderMouse = function(x, y) {
+    return x >= this.x && x <= this.x + this.width  &&
+        y >= this.y && y <= this.y + this.width;
+        
+};
+
+// Global config
+
+    
+
+
+
+
+var drawScene2 = function() {
+    currentScene = 2;
+};
+var drawScene3 = function() {
+    currentScene = 3;
+ if (currentScene === 3) {
+var NUM_COLS = 5;
+var NUM_ROWS = 4;
+}
+
+     
+    
+    
+};
+
+
+
+if (currentScene === 4) {
+var NUM_COLS = 3;
+var NUM_ROWS = 3;
+}
+
+else if (currentScene === 2) {
+var NUM_COLS = 4;
+var NUM_ROWS = 4;
+}
+else if (currentScene === 3) {
+var NUM_COLS = 5;
+var NUM_ROWS = 4;
+}
+
+// Declare an array of all possible faces
+var faces = [
+    
+    getImage("avatars/leafers-seedling"),
+    getImage("avatars/leafers-sapling"),
+    getImage("avatars/leafers-tree"),
+    getImage("avatars/leafers-ultimate"),
+    getImage("avatars/marcimus"),
+    getImage("avatars/mr-pants"),
+    getImage("avatars/mr-pink"),
+    getImage("avatars/old-spice-man"),
+    getImage("avatars/robot_female_1")
+];
+
+// Make an array which has 2 of each, then randomize it
+var possibleFaces = faces.slice(0);
+var selected = [];
+for (var i = 0; i < (NUM_COLS * NUM_ROWS) / 2; i++) {
+    // Randomly pick one from the array of remaining faces
+    var randomInd = floor(random(possibleFaces.length));
+    var face = possibleFaces[randomInd];
+    // Push twice onto array
+    selected.push(face);
+    selected.push(face);
+    // Remove from array
+    possibleFaces.splice(randomInd, 1);
+}
+
+// Now shuffle the elements of that array
+var shuffleArray = function(array) {
+    var counter = array.length;
+
+    // While there are elements in the array
+    while (counter > 0) {
+        // Pick a random index
+        var ind = Math.floor(Math.random() * counter);
+        // Decrease counter by 1
+        counter--;
+        // And swap the last element with it
+        var temp = array[counter];
+        array[counter] = array[ind];
+        array[ind] = temp;
+    }
+};
+shuffleArray(selected);
+
+// Create the tiles
+var tiles = [];
+for (var i = 0; i < NUM_COLS; i++) {
+    for (var j = 0; j < NUM_ROWS; j++) {
+        var tileX = i * 78 + 10;
+        var tileY = j * 78 + 40;
+        var tileFace = selected.pop();
+        tiles.push(new Tile(tileX, tileY, tileFace));
+    }
+}
+
+background(255, 255, 255);
+
+var numTries = 0;
+var numMatches = 0;
+var flippedTiles = [];
+var delayStartFC = null;
+
+
+mouseClicked = function() {
+    
+    if (mouseX >= 150 && mouseX <= 250 && mouseY <= 250 && mouseY >= 200) {
+        if (currentScene === 1) {
+            drawScene2();
+            currentScene = 2;
+    }
+    }
+    else if (mouseX >= 62 && mouseX <= 250 && mouseY <= 338 && mouseY >= 200) {
+        if (currentScene === 2) {
+            drawScene1();
+            currentScene = 1;
+        }
+        }
+    
+         if (mouseX >= 270 && mouseX <= 370 && mouseY <= 250 && mouseY >= 200) {
+        if (currentScene === 1) {
+            drawScene3();
+            currentScene = 3;
+        }
+        }
+        else if (mouseX >= 62 && mouseX <= 250 && mouseY <= 338 && mouseY >= 200) {
+        if (currentScene === 3) {
+            drawScene1();
+            currentScene = 1;
+        }
+        }
+        if (mouseX >= 30 && mouseX <= 130 && mouseY <= 250 && mouseY >= 200) {
+        if (currentScene === 1) {
+            drawScene4();
+            currentScene = 4;
+        }
+        }
+        else if (mouseX >= 62 && mouseX <= 250 && mouseY <= 338 && mouseY >= 200) {
+        if (currentScene === 4) {
+            drawScene1();
+            currentScene = 1;
+            
+        }
+        }
+        
+    for (var i = 0; i < tiles.length; i++) {
+        var tile = tiles[i];
+        if (tile.isUnderMouse(mouseX, mouseY)) {
+            if (flippedTiles.length < 2 && !tile.isFaceUp) {
+                tile.isFaceUp = true;
+                flippedTiles.push(tile);
+                if (flippedTiles.length === 2) {
+                    numTries++;
+                    if (flippedTiles[0].face === flippedTiles[1].face) {
+                        flippedTiles[0].isMatch = true;
+                        flippedTiles[1].isMatch = true;
+                        flippedTiles.length = 0;
+                        numMatches++;
+                    }
+                    delayStartFC = frameCount;
+                }
+            } 
+            loop();
+        }
+    }
+
+};
+
+
+
+draw = function() {
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    if (currentScene === 1) {
+        drawScene1();
+        }
+    if (currentScene === 2) {
+        drawScene2();
+        var NUM_COLS = 4;
+        var NUM_ROWS = 4;
+        
+        
+         background(248, 255, 54);
+    if (delayStartFC && (frameCount - delayStartFC) > 30) {
+        for (var i = 0; i < tiles.length; i++) {
+            var tile = tiles[i];
+            if (!tile.isMatch) {
+                tile.isFaceUp = false;
+            }
+        }
+        flippedTiles = [];
+        delayStartFC = null;
+        noLoop();
+    }
+    
+    for (var i = 0; i < tiles.length; i++) {
+        tiles[i].draw();
+        
+    }
+    
+    if (numMatches === tiles.length/2) {
+        fill(0, 0, 0);
+        textSize(20);
+        text("You found them all in " + numTries + " tries!", 20, 375);
+    }
+        
+        }
+    if (currentScene === 3) {
+        drawScene3();
+        background(255, 249, 232);
+    
+        
+        
+    if (delayStartFC && (frameCount - delayStartFC) > 30) {
+        for (var i = 0; i < tiles.length; i++) {
+            var tile = tiles[i];
+            if (!tile.isMatch) {
+                tile.isFaceUp = false;
+            }
+        }
+        flippedTiles = [];
+        delayStartFC = null;
+        noLoop();
+    }
+    
+    for (var i = 0; i < tiles.length; i++) {
+        tiles[i].draw();
+    }
+    
+    if (numMatches === tiles.length/2) {
+        fill(0, 0, 0);
+        textSize(20);
+        text("You found them all in " + numTries + " tries!", 20, 375);
+    }
+        }
+        
+    if (currentScene === 4) {
+        drawScene4();
+       
+        background(176, 179, 255);
+    if (delayStartFC && (frameCount - delayStartFC) > 30) {
+        for (var i = 0; i < tiles.length; i++) {
+            var tile = tiles[i];
+            if (!tile.isMatch) {
+                tile.isFaceUp = false;
+            }
+        }
+        flippedTiles = [];
+        delayStartFC = null;
+        noLoop();
+    }
+    
+    for (var i = 0; i < tiles.length; i++) {
+        tiles[i].draw();
+    }
+    
+    if (numMatches === tiles.length/2) {
+        fill(0, 0, 0);
+        textSize(20);
+        text("You found them all in " + numTries + " tries!", 20, 375);
+    }
+        }
+      };
+      
+    
+    
+    drawScene1();
+    
+    
+   
+
+
+noLoop();
